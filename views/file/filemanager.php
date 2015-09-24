@@ -1,7 +1,7 @@
 <?php
 
-use pendalf89\filemanager\assets\FilemanagerAsset;
-use pendalf89\filemanager\Module;
+use derekisbusy\filemanager\assets\FilemanagerAsset;
+use derekisbusy\filemanager\Module;
 use yii\widgets\ListView;
 use yii\helpers\Html;
 use yii\helpers\Url;

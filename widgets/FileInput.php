@@ -1,10 +1,10 @@
 <?php
-namespace pendalf89\filemanager\widgets;
+namespace derekisbusy\filemanager\widgets;
 
 use Yii;
 use yii\helpers\Html;
 use yii\widgets\InputWidget;
-use pendalf89\filemanager\assets\FileInputAsset;
+use derekisbusy\filemanager\assets\FileInputAsset;
 use yii\helpers\Url;
 
 /**
@@ -35,9 +35,10 @@ use yii\helpers\Url;
  *  ]) ?>
  *
  * This class provides filemanager usage. You can optional select all media file info to your input field.
- * More samples of usage see on github: https://github.com/PendalF89/yii2-filemanager
+ * More samples of usage see on github: https://github.com/derekisbusy/yii2-filemanager
  *
- * @package pendalf89\filemanager\widgets
+ * @package derekisbusy\filemanager\widgets
+ * @author Derek Gifford <derekisbusy@gmail.com>
  * @author Zabolotskikh Boris <zabolotskich@bk.ru>
  */
 class FileInput extends InputWidget
@@ -154,7 +155,7 @@ class FileInput extends InputWidget
             );
         }
 
-        $modal = $this->renderFile('@vendor/pendalf89/yii2-filemanager/views/file/modal.php', [
+        $modal = $this->renderFile('@vendor/derekisbusy/yii2-filemanager/views/file/modal.php', [
             'inputId' => $this->options['id'],
             'btnId' => $this->buttonOptions['id'],
             'frameId' => $this->options['id'] . '-frame',

@@ -1,6 +1,6 @@
 <?php
 
-namespace pendalf89\filemanager\models;
+namespace derekisbusy\filemanager\models;
 
 use Yii;
 use yii\web\UploadedFile;

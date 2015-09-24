@@ -2,11 +2,11 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use pendalf89\filemanager\assets\FilemanagerAsset;
-use pendalf89\filemanager\Module;
+use derekisbusy\filemanager\assets\FilemanagerAsset;
+use derekisbusy\filemanager\Module;
 
 /* @var $this yii\web\View */
-/* @var $model pendalf89\filemanager\models\Mediafile */
+/* @var $model derekisbusy\filemanager\models\Mediafile */
 /* @var $form yii\widgets\ActiveForm */
 
 $bundle = FilemanagerAsset::register($this);

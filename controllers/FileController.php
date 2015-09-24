@@ -1,14 +1,14 @@
 <?php
 
-namespace pendalf89\filemanager\controllers;
+namespace derekisbusy\filemanager\controllers;
 
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use pendalf89\filemanager\Module;
-use pendalf89\filemanager\models\Mediafile;
-use pendalf89\filemanager\assets\FilemanagerAsset;
+use derekisbusy\filemanager\Module;
+use derekisbusy\filemanager\models\Mediafile;
+use derekisbusy\filemanager\assets\FilemanagerAsset;
 use yii\helpers\Url;
 
 class FileController extends Controller
@@ -44,7 +44,7 @@ class FileController extends Controller
 
     public function actionFilemanager()
     {
-        $this->layout = '@vendor/pendalf89/yii2-filemanager/views/layouts/main';
+        $this->layout = '@vendor/derekisbusy/yii2-filemanager/views/layouts/main';
         $model = new Mediafile();
         $dataProvider = $model->search();
         $dataProvider->pagination->defaultPageSize = 15;
@@ -57,7 +57,7 @@ class FileController extends Controller
 
     public function actionUploadmanager()
     {
-        $this->layout = '@vendor/pendalf89/yii2-filemanager/views/layouts/main';
+        $this->layout = '@vendor/derekisbusy/yii2-filemanager/views/layouts/main';
         return $this->render('uploadmanager', ['model' => new Mediafile()]);
     }
 
