@@ -126,6 +126,9 @@ class FileInput extends InputWidget
         if (empty($this->buttonOptions['id'])) {
             $this->buttonOptions['id'] = $this->options['id'] . '-btn';
         }
+        
+        if($this->model)
+            $this->frameSrc['model']=$model;
 
         $this->buttonOptions['role'] = 'filemanager-launch';
         $this->resetButtonOptions['role'] = 'clear-input';

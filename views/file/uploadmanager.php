@@ -18,7 +18,7 @@ use yii\helpers\Html;
         'clientOptions' => [
             'autoUpload'=> Yii::$app->getModule('filemanager')->autoUpload,
         ],
-        'url' => ['upload'],
+        'url' => ['upload','model'=>'strain','id'=>'1'],
         'gallery' => false,
     ]) ?>
 </div>

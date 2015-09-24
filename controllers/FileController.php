@@ -79,6 +79,7 @@ class FileController extends Controller
             $model->createThumbs($routes, $this->module->thumbs);
         }
 
+        $response=[];
         $response['files'][] = [
             'url'           => $model->url,
             'thumbnailUrl'  => $model->getDefaultThumbUrl($bundle->baseUrl),
