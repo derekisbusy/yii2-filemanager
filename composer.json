@@ -22,5 +22,24 @@
         "psr-4": {
             "pendalf89\\filemanager\\": ""
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "derekisbusy/yii2-filemanager",
+                "version": "dev-master",
+                "source": {
+                    "url": "git://github.com/derekisbusy/yii2-filemanager.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "psr-0" : {
+                        "derekisbusy\\filemanager" : "src"
+                    }
+                }
+            }
+        }
+    ],
 }
