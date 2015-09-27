@@ -110,6 +110,24 @@ class FileInput extends InputWidget
      * @var array selecte the frameSrc in case you use a different module name
      */
     public $frameSrc  = ['/filemanager/file/filemanager'];
+    
+    /**
+     *
+     * @var string the relation setting to use for this upload as defined in the module config
+     */
+    public $related;
+    
+    /**
+     *
+     * @var integer the id for the record item the files should be attached to.
+     */
+    public $itemId;
+    
+    /**
+     *
+     * @var string a unique string to use as a temporary Id for records with no Id ie. before they're created
+     */
+    public $tempId;
 
     const DATA_ID = 'id';
     const DATA_URL = 'url';
@@ -127,9 +145,12 @@ class FileInput extends InputWidget
             $this->buttonOptions['id'] = $this->options['id'] . '-btn';
         }
         
-        if($this->model)
-            $this->frameSrc['model']=$model;
-
+        if($this->related)
+            $this->frameSrc['related']=$this->related;
+        if($this->itemId)
+            $this->frameSrc['itemId']=$this->itemId;
+        if($this->tempId)
+            $this->frameSrc['tempId']=$this->tempId;
         $this->buttonOptions['role'] = 'filemanager-launch';
         $this->resetButtonOptions['role'] = 'clear-input';
         $this->resetButtonOptions['data-clear-element-id'] = $this->options['id'];

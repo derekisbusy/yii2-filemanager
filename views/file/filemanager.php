@@ -7,7 +7,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $searchModel pendalf89\filemanager\models\Mediafile */
+/* @var $searchModel derekisbusy\filemanager\models\Mediafile */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->params['moduleBundle'] = FilemanagerAsset::register($this);
 ?>
@@ -20,23 +20,24 @@ $this->params['moduleBundle'] = FilemanagerAsset::register($this);
         'layout' => '<div class="items">{items}</div>{pager}',
         'itemOptions' => ['class' => 'item'],
         'itemView' => function ($model, $key, $index, $widget) {
-               if(file_exists(substr($model->getDefaultThumbUrl($this->params['moduleBundle']->baseUrl), 1))){
+//        return $model->getDefaultThumbUrl($this->params['moduleBundle']->baseUrl);
+//               if(file_exists(substr($model->getDefaultThumbUrl($this->params['moduleBundle']->baseUrl), 1))){
                     return Html::a(
-                        Html::img(Yii::getAlias('@web').$model->getDefaultThumbUrl($this->params['moduleBundle']->baseUrl))
+                        Html::img($model->getDefaultThumbUrl($this->params['moduleBundle']->baseUrl))
                         . '<span class="checked glyphicon glyphicon-check"></span>',
                         '#mediafile',
                         ['data-key' => $key]
                     );
-                }
-                else{
-                    return null;
-                }
+//                }
+//                else{
+//                    return 'not found?';
+//                }
             },
     ]) ?>
 
     <div class="dashboard">
         <p><?= Html::a('<span class="glyphicon glyphicon-upload"></span> ' . Module::t('main', 'Upload manager'),
-                ['file/uploadmanager'], ['class' => 'btn btn-default']) ?></p>
+                ['file/uploadmanager','related'=>$related,'itemId'=>$itemId,'tempId'=>$tempId], ['class' => 'btn btn-default']) ?></p>
         <div id="fileinfo">
 
         </div>

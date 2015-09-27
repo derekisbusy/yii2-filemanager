@@ -42,43 +42,74 @@ class FileController extends Controller
         return $this->render('index');
     }
 
-    public function actionFilemanager()
+    public function actionFilemanager($related=null,$itemId=null,$tempId=null)
     {
+        $relation = null;
+        if(isset($related)) {
+            if(!isset($this->module->relations[$related])) {
+                throw new \yii\base\InvalidParamException('Related model not defined in config');
+            }
+            $relation = $this->module->relations[$related];
+        }
         $this->layout = '@vendor/derekisbusy/yii2-filemanager/views/layouts/main';
         $model = new Mediafile();
-        $dataProvider = $model->search();
+        $query = Mediafile::find()->orderBy('created_at DESC');
+        if($tempId) {
+            $query->where(['temp_id'=>$tempId]);
+        }
+        if($relation && $itemId) {
+            $query->andWhere([$relation['model_id']=>$itemId]);
+            $query->innerJoin($relation['class']::tableName(),"`{$relation['file_id']}`=`id`");
+        }
+        $dataProvider = $model->search($query);
         $dataProvider->pagination->defaultPageSize = 15;
 
         return $this->render('filemanager', [
             'model' => $model,
             'dataProvider' => $dataProvider,
+            'related'=>$related,
+            'itemId'=>$itemId,
+            'tempId'=>$tempId
         ]);
     }
 
-    public function actionUploadmanager()
+    public function actionUploadmanager($related=null,$itemId=null,$tempId=null)
     {
         $this->layout = '@vendor/derekisbusy/yii2-filemanager/views/layouts/main';
-        return $this->render('uploadmanager', ['model' => new Mediafile()]);
+        return $this->render('uploadmanager', ['model' => new Mediafile(),'related'=>$related,'itemId'=>$itemId,'tempId'=>$tempId]);
     }
 
     /**
      * Provides upload file
      * @return mixed
      */
-    public function actionUpload()
+    public function actionUpload($related=null,$itemId=null,$tempId=null)
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
+        $relation=null;
+        if(isset($related)) {
+            if(!isset($this->module->relations[$related]))
+                throw new \yii\base\InvalidParamException;
+            $relation = $this->module->relations[$related];
+        }
         $model = new Mediafile();
         $routes = $this->module->routes;
         $rename = $this->module->rename;
-        $model->saveUploadedFile($routes, $rename);
+        if($tempId)
+            $model->temp_id = $tempId;
+        $model->saveUploadedFile($routes, $rename, $related, $itemId);
+        // create relations
+        if($related && $itemId) {
+            $thru = new $this->module->relations[$related]['class']();
+            $thru->{$relation['model_id']} = $itemId;
+            $thru->{$relation['file_id']} = $model->id;
+            $thru->save();
+        }
         $bundle = FilemanagerAsset::register($this->view);
 
         if ($model->isImage()) {
             $model->createThumbs($routes, $this->module->thumbs);
         }
-
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $response=[];
         $response['files'][] = [
             'url'           => $model->url,

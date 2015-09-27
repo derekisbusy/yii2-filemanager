@@ -15,6 +15,6 @@ class FileInputAsset extends AssetBundle
     public $depends = [
         'yii\bootstrap\BootstrapAsset',
         'yii\web\JqueryAsset',
-        'pendalf89\filemanager\assets\ModalAsset',
+        'derekisbusy\filemanager\assets\ModalAsset',
     ];
 }
