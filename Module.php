@@ -8,8 +8,19 @@ use derekisbusy\filemanager\models\Mediafile;
 
 class Module extends \yii\base\Module
 {
+    const EVENT_INDEX = 1;
+    const EVENT_FILE_MANAGER = 2;
+    const EVENT_UPLOAD_MANAGER = 3;
+    const EVENT_UPLOAD = 4;
+    const EVENT_UPDATE = 5;
+    const EVENT_DELETE = 6;
+    const EVENT_RESIZE = 7;
+    const EVENT_INFO = 8;
+    const EVENT_CREATE_THUMBS = 9;
+    
     public $controllerNamespace = 'derekisbusy\filemanager\controllers';
 
+    public $controllerBehaviors = [];
     /**
      *  Set true if you want to rename files if the name is already in use 
      * @var bolean 
@@ -66,6 +77,16 @@ class Module extends \yii\base\Module
         // path for uploaded files when using related tables and no Id exist
         'tempPath' => 'temp',
     ];
+    
+    /**
+     *
+     * @var integer default page size in file manager action.
+     */
+    public $defaultPageSize = 15;
+    
+    public $rbac = false;
+    
+    public $guestUpload = false;
     
     public $defaultRelation = [
         'canonical' => false,

@@ -17,15 +17,15 @@ class FileController extends Controller
 
     public function behaviors()
     {
-        return [
+        return array_merge([
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
                     'update' => ['post'],
                 ],
-            ],
-        ];
+            ]
+        ], $this->module->controllerBehaviors);
     }
 
     public function beforeAction($action)
@@ -39,10 +39,12 @@ class FileController extends Controller
 
     public function actionIndex()
     {
+        $event = new \derekisbusy\filemanager\events\IndexEvent();
+        $this->module->trigger(Module::EVENT_INDEX, $event);
         return $this->render('index');
     }
 
-    public function actionFilemanager($related=null,$itemId=null,$tempId=null)
+    public function actionFilemanager($related=null, $itemId=null, $tempId=null)
     {
         $relation = null;
         if(isset($related)) {
@@ -54,6 +56,7 @@ class FileController extends Controller
         $this->layout = '@vendor/derekisbusy/yii2-filemanager/views/layouts/main';
         $model = new Mediafile();
         $query = Mediafile::find()->orderBy('created_at DESC');
+        
         if($tempId) {
             $query->where(['temp_id'=>$tempId]);
         }
@@ -61,20 +64,25 @@ class FileController extends Controller
             $query->andWhere([$relation['model_id']=>$itemId]);
             $query->innerJoin($relation['class']::tableName(),"`{$relation['file_id']}`=`id`");
         }
+        $event = new \derekisbusy\filemanager\events\FileManagerEvent();
+        $this->module->trigger(Module::EVENT_FILE_MANAGER, $event);
         $dataProvider = $model->search($query);
-        $dataProvider->pagination->defaultPageSize = 15;
-
-        return $this->render('filemanager', [
+        $dataProvider->pagination->defaultPageSize = $event->defaultPageSize ? $event->defaultPageSize : $this->module->defaultPageSize;
+        
+        $view = $event->view ? $event->view : Module::VIEW_FILE_MANAGER;
+        return $this->render($view, [
             'model' => $model,
             'dataProvider' => $dataProvider,
-            'related'=>$related,
-            'itemId'=>$itemId,
-            'tempId'=>$tempId
+            'related' => $related,
+            'itemId' => $itemId,
+            'tempId' => $tempId
         ]);
     }
 
     public function actionUploadmanager($related=null,$itemId=null,$tempId=null)
     {
+        $event = new \derekisbusy\filemanager\events\UploadManagerEvent();
+        $this->module->trigger(Module::EVENT_UPLOAD_MANAGER, $event);
         $this->layout = '@vendor/derekisbusy/yii2-filemanager/views/layouts/main';
         return $this->render('uploadmanager', ['model' => new Mediafile(),'related'=>$related,'itemId'=>$itemId,'tempId'=>$tempId]);
     }
@@ -85,6 +93,9 @@ class FileController extends Controller
      */
     public function actionUpload($related=null,$itemId=null,$tempId=null)
     {
+        $event = new \derekisbusy\filemanager\events\UploadEvent();
+        $event->relatedClass = $this->module->relations[$related];
+        $this->module->trigger(Module::EVENT_UPLOAD, $event);
         $relation=null;
         if(isset($related)) {
             if(!isset($this->module->relations[$related]))
@@ -131,6 +142,8 @@ class FileController extends Controller
      */
     public function actionUpdate($id)
     {
+        $event = new \derekisbusy\filemanager\events\UpdateEvent();
+        $this->module->trigger(Module::EVENT_UPDATE, $event);
         $model = Mediafile::findOne($id);
         $message = Module::t('main', 'Changes not saved.');
 
@@ -153,10 +166,14 @@ class FileController extends Controller
      */
     public function actionDelete($id)
     {
+        
         Yii::$app->response->format = Response::FORMAT_JSON;
         $routes = $this->module->routes;
 
         $model = Mediafile::findOne($id);
+        
+        $event = new \derekisbusy\filemanager\events\UploadManagerEvent();
+        $this->module->trigger(Module::EVENT_DELETE, $event);
 
         if ($model->isImage()) {
             $model->deleteThumbs($routes);
@@ -173,12 +190,18 @@ class FileController extends Controller
      */
     public function actionResize()
     {
+        $event = new \derekisbusy\filemanager\events\ResizeEvent();
+        $this->module->trigger(Module::EVENT_RESIZE, $event);
+        
         $models = Mediafile::findByTypes(Mediafile::$imageFileTypes);
+        
         $routes = $this->module->routes;
 
         foreach ($models as $model) {
             if ($model->isImage()) {
                 $model->deleteThumbs($routes);
+                $event = new \derekisbusy\filemanager\events\CreateThumbsEvent();
+                $this->module->trigger(Module::EVENT_RESIZE, $event);
                 $model->createThumbs($routes, $this->module->thumbs);
             }
         }
@@ -194,6 +217,8 @@ class FileController extends Controller
      */
     public function actionInfo($id, $strictThumb = null)
     {
+        $event = new \derekisbusy\filemanager\events\InfoEvent();
+        $this->module->trigger(Module::EVENT_INFO, $event);
         $model = Mediafile::findOne($id);
         return $this->renderPartial('info', [
             'model' => $model,
