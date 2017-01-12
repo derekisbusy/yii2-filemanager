@@ -55,7 +55,7 @@ Configuration:
 ```php
 'modules' => [
     'filemanager' => [
-        'class' => 'pendalf89\filemanager\Module',
+        'class' => 'derekisbusy\filemanager\Module',
         // Upload routes
         'routes' => [
             // Base absolute path to web directory
