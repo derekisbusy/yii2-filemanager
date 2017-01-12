@@ -34,20 +34,20 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist pendalf89/yii2-filemanager "*"
+php composer.phar require --prefer-dist derekisbusy/yii2-filemanager "*"
 ```
 
 or add
 
 ```
-"pendalf89/yii2-filemanager": "*"
+"derekisbusy/yii2-filemanager": "*"
 ```
 
 to the require section of your `composer.json` file.
 
 Apply migration
 ```sh
-yii migrate --migrationPath=vendor/pendalf89/yii2-filemanager/migrations
+yii migrate --migrationPath=vendor/derekisbusy/yii2-filemanager/migrations
 ```
 
 Configuration:
